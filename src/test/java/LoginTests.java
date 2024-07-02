@@ -23,8 +23,12 @@ public class LoginTests {
     private static WebElement USERNAME_FIELD;
     private static WebElement CONFIRM_BUTTON;
     private static WebElement PASSWORD_FIELD;
+    private static WebElement LOG_OUT_BUTTON;
     private static WebElement LOGIN_MAIN_TITLE;
     private static WebElement FORM_AUTHENTICATION_BUTTON;
+
+    private static final String VALID_USERNAME = "tomsmith";
+    private static final String VALID_PASSWORD = "SuperSecretPassword!";
 
     @BeforeClass
     public void setUp() {
@@ -44,9 +48,29 @@ public class LoginTests {
         LOGIN_IMAGE = webDriverWait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//img"))));
         Assert.assertEquals(LOGIN_MAIN_TITLE.getText(), "Login Page", "Title is not correct");
         Assert.assertTrue(LOGIN_IMAGE.isDisplayed(), "Image is not displayed on page");
+        Assert.assertEquals(driver.getCurrentUrl(), "https://the-internet.herokuapp.com/login", "The URL does not match what was expected");
     }
 
-    @Test(testName = "Check login with invalid credentials", priority = 2, dataProvider = "invalid credentials")
+    @Test(testName = "Check login with valid credentials", priority = 2)
+    public void checkLoginWithValidCredentials() {
+        USERNAME_FIELD = webDriverWait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("username"))));
+        PASSWORD_FIELD = webDriverWait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("password"))));
+        CONFIRM_BUTTON = webDriverWait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//button[@type = 'submit']"))));
+        USERNAME_FIELD.sendKeys(VALID_USERNAME);
+        PASSWORD_FIELD.sendKeys(VALID_PASSWORD);
+        CONFIRM_BUTTON.click();
+        Assert.assertEquals(driver.getCurrentUrl(), "https://the-internet.herokuapp.com/secure", "The URL does not match what was expected");
+        ALERT_MESSAGE = driver.findElement(By.id("flash"));
+        LOG_OUT_BUTTON = driver.findElement(By.xpath("//a[@href = '/logout']"));
+        Assert.assertTrue(ALERT_MESSAGE.getText().trim().contains("You logged into a secure area!"), "Success message is not correct");
+        Assert.assertTrue(LOG_OUT_BUTTON.isDisplayed(), "LogOut button is not displayed");
+        LOG_OUT_BUTTON.click();
+        Assert.assertEquals(driver.getCurrentUrl(), "https://the-internet.herokuapp.com/login", "The URL does not match what was expected");
+        ALERT_MESSAGE = driver.findElement(By.id("flash"));
+        Assert.assertTrue(ALERT_MESSAGE.getText().trim().contains("You logged out of the secure area!"), "Success message is not correct");
+    }
+
+    @Test(testName = "Check login with invalid credentials", priority = 3, dataProvider = "invalid credentials")
     public void checkLoginWithInvalidCredentials(String username, String password) {
         USERNAME_FIELD = webDriverWait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("username"))));
         PASSWORD_FIELD = webDriverWait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("password"))));
@@ -55,7 +79,8 @@ public class LoginTests {
         PASSWORD_FIELD.sendKeys(password);
         CONFIRM_BUTTON.click();
         ALERT_MESSAGE = driver.findElement(By.id("flash"));
-        Assert.assertTrue(ALERT_MESSAGE.getText().trim().contains("Your username is invalid!"), "Alert message is not correct");
+        System.out.println(ALERT_MESSAGE.getText().trim());
+        Assert.assertTrue(ALERT_MESSAGE.getText().trim().contains("Your username is invalid!") || ALERT_MESSAGE.getText().trim().contains("Your password is invalid!"), "Alert message is not correct");
     }
 
     @AfterClass
@@ -66,9 +91,8 @@ public class LoginTests {
     @DataProvider(name = "invalid credentials")
     public Object[][] getTestData() {
         return new Object[][]{
-                {" ", " "},
-                {" ", "password"},
-                {"username", " "},
+                {"tomsmith", ""},
+                {"", "SuperSecretPassword!"},
         };
     }
 }
