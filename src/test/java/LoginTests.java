@@ -23,11 +23,11 @@ public class LoginTests {
     private static WebDriverWait webDriverWait;
 
     private static WebElement loginImage;
+    private static WebElement logOutButton;
     private static WebElement alertMessage;
     private static WebElement userNameField;
     private static WebElement confirmButton;
     private static WebElement passwordField;
-    private static WebElement logOutButton;
     private static WebElement loginMainTitle;
     private static WebElement formAuthenticationButton;
 
