@@ -19,7 +19,7 @@ import static org.example.testdata.Users.VALID_USER;
 
 public class LoginTests {
 
-    private WebDriver driver;
+    private static WebDriver driver;
     private static WebDriverWait webDriverWait;
 
     private static WebElement loginImage;
