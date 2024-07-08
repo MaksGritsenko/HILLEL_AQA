@@ -23,7 +23,7 @@ public class LoginTests extends BaseTest {
         assertTrue(homePage.isUrlDisplayed(HOME_URL.getUrl()), "Home page is not displayed");
     }
 
-    @Test(testName = "Check login page is displayed", priority = 2)
+    @Test(testName = "Check login page is opened", priority = 2)
     public void checkLoginPageIsDisplayed() {
         loginPage = homePage.clickOnFormAuthenticationButton();
         assertTrue(loginPage.checkLoginImageIsDisplayed(), "Login image is not displayed");
