@@ -1,91 +1,54 @@
-import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.example.pageopject.LoginPage;
+import org.example.pageopject.SecurePage;
+
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.time.Duration;
-
 import static org.example.testdata.AlertMessage.*;
+import static org.example.testdata.Url.*;
 import static org.example.testdata.Users.INVALID_USER;
 import static org.example.testdata.Users.VALID_USER;
+import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.assertEquals;
 
-public class LoginTests {
+public class LoginTests extends BaseTest {
 
-    private static WebDriver driver;
-    private static WebDriverWait webDriverWait;
+    private LoginPage loginPage;
+    private SecurePage securePage;
 
-    private static WebElement loginImage;
-    private static WebElement logOutButton;
-    private static WebElement alertMessage;
-    private static WebElement userNameField;
-    private static WebElement confirmButton;
-    private static WebElement passwordField;
-    private static WebElement loginMainTitle;
-    private static WebElement formAuthenticationButton;
-
-    @BeforeClass
-    public void setUp() {
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        driver.manage().deleteAllCookies();
-        driver.get("https://the-internet.herokuapp.com/");
-        webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    @Test(testName = "Check home page is opened", priority = 1)
+    public void checkHomePageIsOpened() {
+        assertTrue(homePage.checkHomeTitleIsCorrect(), "Home page title is not correct");
+        assertTrue(homePage.isUrlDisplayed(HOME_URL.getUrl()), "Home page is not displayed");
     }
 
-    @Test(testName = "Check login page is displayed", priority = 1)
+    @Test(testName = "Check login page is displayed", priority = 2)
     public void checkLoginPageIsDisplayed() {
-        formAuthenticationButton = webDriverWait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//*[@href='/login']"))));
-        formAuthenticationButton.click();
-        loginMainTitle = webDriverWait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//h2[text()='Login Page']"))));
-        loginImage = webDriverWait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//img"))));
-        Assert.assertEquals(loginMainTitle.getText(), "Login Page", "Title is not correct");
-        Assert.assertTrue(loginImage.isDisplayed(), "Image is not displayed on page");
-        Assert.assertEquals(driver.getCurrentUrl(), "https://the-internet.herokuapp.com/login", "The URL does not match what was expected");
+        loginPage = homePage.clickOnFormAuthenticationButton();
+        assertTrue(loginPage.checkLoginImageIsDisplayed(), "Login image is not displayed");
+        assertTrue(loginPage.checkLoginMainTitleIsCorrect(), "Login main title is not correct");
+        assertTrue(loginPage.isUrlDisplayed(LOGIN_URL.getUrl()), "The URL does not match what was expected");
     }
 
-    @Test(testName = "Check login with valid credentials", priority = 2)
+    @Test(testName = "Check login with valid credentials", priority = 3)
     public void checkLoginWithValidCredentials() {
-        userNameField = webDriverWait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("username"))));
-        passwordField = webDriverWait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("password"))));
-        confirmButton = webDriverWait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//button[@type = 'submit']"))));
-        userNameField.sendKeys(VALID_USER.getUsername());
-        passwordField.sendKeys(VALID_USER.getPassword());
-        confirmButton.click();
-        Assert.assertEquals(driver.getCurrentUrl(), "https://the-internet.herokuapp.com/secure", "The URL does not match what was expected");
-        alertMessage = driver.findElement(By.id("flash"));
-        logOutButton = driver.findElement(By.xpath("//a[@href = '/logout']"));
-        Assert.assertEquals(alertMessage.getText().trim(), SUCCESS_LOGIN_MESSAGE.getMessage(), "Success message is not correct");
-        Assert.assertTrue(logOutButton.isDisplayed(), "LogOut button is not displayed");
-        logOutButton.click();
-        Assert.assertEquals(driver.getCurrentUrl(), "https://the-internet.herokuapp.com/login", "The URL does not match what was expected");
-        alertMessage = driver.findElement(By.id("flash"));
-        Assert.assertEquals(alertMessage.getText().trim(), SUCCESS_LOGOUT_MESSAGE.getMessage(), "Success message is not correct");
+        loginPage.setCredentials(VALID_USER.getUsername(), VALID_USER.getPassword());
+        securePage = (SecurePage) loginPage.clickOnConfirmButton(false);
+        assertTrue(securePage.isUrlDisplayed(SECURE_URL.getUrl()), "The URL does not match what was expected");
+        Assert.assertEquals(securePage.getAlertMessage().checkAlertMessageIsCorrect(), SUCCESS_LOGIN_MESSAGE.getMessage(), "Success message is not correct");
+        loginPage = securePage.clickOnLogOutButton();
+        assertTrue(loginPage.checkLoginImageIsDisplayed(), "Login image is not displayed");
+        assertTrue(loginPage.checkLoginMainTitleIsCorrect(), "Login main title is not correct");
+        assertTrue(loginPage.isUrlDisplayed(LOGIN_URL.getUrl()), "The URL does not match what was expected");
+        assertEquals(loginPage.getAlertMessage().checkAlertMessageIsCorrect(), SUCCESS_LOGOUT_MESSAGE.getMessage(), "Success message is not correct");
     }
 
-    @Test(testName = "Check login with invalid credentials", priority = 3, dataProvider = "invalid credentials")
+    @Test(testName = "Check login with invalid credentials", priority = 4, dataProvider = "invalid credentials")
     public void checkLoginWithInvalidCredentials(String username, String password, String expectedMessage) {
-        userNameField = webDriverWait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("username"))));
-        passwordField = webDriverWait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("password"))));
-        confirmButton = webDriverWait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//button[@type = 'submit']"))));
-        userNameField.sendKeys(username);
-        passwordField.sendKeys(password);
-        confirmButton.click();
-        alertMessage = driver.findElement(By.id("flash"));
-        Assert.assertEquals(alertMessage.getText().trim(), expectedMessage, "Alert message is not correct");
-    }
-
-    @AfterClass
-    public void tearDown() {
-        driver.quit();
+        loginPage.setCredentials(username, password);
+        loginPage.clickOnConfirmButton(true);
+        assertEquals(loginPage.getAlertMessage().checkAlertMessageIsCorrect(), expectedMessage, "Alert message is not correct");
     }
 
     @DataProvider(name = "invalid credentials")
