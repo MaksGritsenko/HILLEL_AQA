@@ -1,4 +1,4 @@
-package org.example.components;
+package org.theinternet.components;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

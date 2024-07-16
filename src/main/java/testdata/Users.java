@@ -1,9 +1,10 @@
-package org.example.testdata;
+package testdata;
 
 public enum Users {
 
     VALID_USER("tomsmith", "SuperSecretPassword!"),
-    INVALID_USER("", "");
+    INVALID_USER("", ""),
+    VALID_SAUCEDEMO_USER("standard_user","secret_sauce");
 
     private final String username;
     private final String password;

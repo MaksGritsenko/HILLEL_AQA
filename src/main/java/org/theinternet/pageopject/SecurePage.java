@@ -1,6 +1,7 @@
-package org.example.pageopject;
+package org.theinternet.pageopject;
 
-import org.example.components.AlertMessageComponent;
+import base.BasePage;
+import org.theinternet.components.AlertMessageComponent;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 

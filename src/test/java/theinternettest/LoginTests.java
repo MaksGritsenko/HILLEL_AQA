@@ -1,14 +1,17 @@
-import org.example.pageopject.LoginPage;
-import org.example.pageopject.SecurePage;
+package theinternettest;
+
+import base.BaseTest;
+import org.theinternet.pageopject.LoginPage;
+import org.theinternet.pageopject.SecurePage;
 
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import static org.example.testdata.AlertMessage.*;
-import static org.example.testdata.Url.*;
-import static org.example.testdata.Users.INVALID_USER;
-import static org.example.testdata.Users.VALID_USER;
+import static testdata.AlertMessage.*;
+import static testdata.Url.*;
+import static testdata.Users.INVALID_USER;
+import static testdata.Users.VALID_USER;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.assertEquals;
 

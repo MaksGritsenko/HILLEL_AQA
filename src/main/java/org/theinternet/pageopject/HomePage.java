@@ -1,5 +1,6 @@
-package org.example.pageopject;
+package org.theinternet.pageopject;
 
+import base.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 

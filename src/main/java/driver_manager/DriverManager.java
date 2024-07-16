@@ -1,13 +1,14 @@
-package org.example.driver_manager;
+package driver_manager;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.example.pageopject.HomePage;
+import org.theinternet.pageopject.HomePage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import saucedemo.com.pageobject.AutorisationPage;
 
 import java.util.concurrent.TimeUnit;
 
-import static org.example.testdata.Url.HOME_URL;
+import static testdata.Url.HOME_URL;
 
 public class DriverManager {
 
@@ -24,6 +25,11 @@ public class DriverManager {
     public HomePage openHomePageByUrl() {
         driver.get(HOME_URL.getUrl());
         return new HomePage(driver);
+    }
+
+    public AutorisationPage openAutorisationPageByUrl() {
+        driver.get("https://www.saucedemo.com/");
+        return new AutorisationPage(driver);
     }
 
     public void quitDriver() {

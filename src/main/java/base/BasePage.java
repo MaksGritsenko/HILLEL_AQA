@@ -1,9 +1,6 @@
-package org.example.pageopject;
+package base;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.PageFactory;
-
-import static org.example.testdata.Url.HOME_URL;
 
 public class BasePage {
 
