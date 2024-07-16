@@ -31,7 +31,7 @@ public class SaucedemoTests extends BaseTest {
     public void checkAddToTrash() {
         inventoryPage.clickOnAddToCartButton();
         assertTrue(inventoryPage.isRemoveButtonNameCorrect(), "Remove button is not correct");
-        assertTrue(inventoryPage.isShippingCounterDisplayed(), "Shipping counter is not correct");
+        assertTrue(inventoryPage.isShippingCounterDisplayed(), "Shipping counter is not displayed");
         assertEquals(inventoryPage.getShippingCounter(), 1, "Counter is not changed");
     }
 
