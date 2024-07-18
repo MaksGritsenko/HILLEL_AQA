@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Login Suite">
+<suite name="Login Suite" parallel="classes" thread-count="2">
 
     <test name="Login tests">
         <classes>
             <class name="theinternettest.LoginTests"/>
+        </classes>
+    </test>
+    <test name="AddRemoveTests">
+        <classes>
+            <class name="theinternettest.AddRemoveElementsTests"></class>
         </classes>
     </test>
 </suite>
