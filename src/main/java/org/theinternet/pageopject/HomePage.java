@@ -14,6 +14,10 @@ public class HomePage extends BasePage {
         return By.xpath("//*[@href='/login']");
     }
 
+    private By getAddRemoveElementsButton() {
+        return By.xpath("//*[@href='/add_remove_elements/']");
+    }
+
     private By getHomeTitle() {
         return By.xpath("//h1[@class = 'heading']");
     }
@@ -25,5 +29,10 @@ public class HomePage extends BasePage {
     public LoginPage clickOnFormAuthenticationButton() {
         driver.findElement(getFormAuthenticationButton()).click();
         return new LoginPage(driver);
+    }
+
+    public AddRemoveElementsPage clickOnAddRemoveElementsButton() {
+        driver.findElement(getAddRemoveElementsButton()).click();
+        return new AddRemoveElementsPage(driver);
     }
 }

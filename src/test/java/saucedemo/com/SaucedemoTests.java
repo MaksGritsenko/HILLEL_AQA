@@ -14,6 +14,7 @@ public class SaucedemoTests extends BaseTest {
 
     @Test(testName = "Check autorisation page is opened", priority = 1)
     public void sauceTest() {
+        autorisationPage = driverManager.openAutorisationPageByUrl();
         assertTrue(autorisationPage.checkAutorisationMainTitleIsCorrect(), "Autorisation page title is not correct");
         assertTrue(autorisationPage.isUrlDisplayed(AUTORISATION_SAUCEDEMO_URL.getUrl()), "Autorisation page url is not correct");
     }

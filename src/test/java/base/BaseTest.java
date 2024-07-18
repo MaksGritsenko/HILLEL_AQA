@@ -9,13 +9,12 @@ import saucedemo.com.pageobject.AutorisationPage;
 public class BaseTest {
 
     protected HomePage homePage;
-    private DriverManager driverManager;
+    protected DriverManager driverManager;
     protected AutorisationPage autorisationPage;
 
     @BeforeClass
     public void setUp() {
         driverManager = new DriverManager();
-        autorisationPage = driverManager.openAutorisationPageByUrl();
     }
 
     @AfterClass

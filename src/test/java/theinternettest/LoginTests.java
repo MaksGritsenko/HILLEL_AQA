@@ -22,6 +22,7 @@ public class LoginTests extends BaseTest {
 
     @Test(testName = "Check home page is opened", priority = 1)
     public void checkHomePageIsOpened() {
+        homePage = driverManager.openHomePageByUrl();
         assertTrue(homePage.checkHomeTitleIsCorrect(), "Home page title is not correct");
         assertTrue(homePage.isUrlDisplayed(HOME_URL.getUrl()), "Home page is not displayed");
     }
